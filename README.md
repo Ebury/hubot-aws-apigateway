@@ -25,3 +25,6 @@ user1>> hubot list api keys
 hubot>> **Example API Key**: id = abcd1234, enabled = **false**
 ```
 
+## NPM Module
+
+https://www.npmjs.com/package/hubot-gateway
