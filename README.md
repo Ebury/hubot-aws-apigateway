@@ -27,4 +27,4 @@ hubot>> **Example API Key**: id = abcd1234, enabled = **false**
 
 ## NPM Module
 
-https://www.npmjs.com/package/hubot-gateway
+https://www.npmjs.com/package/hubot-aws-apigateway
