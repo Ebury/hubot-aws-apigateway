@@ -1,4 +1,4 @@
-# hubot-gateway
+# hubot-aws-apigateway
 
 Helps manage the AWS API Gateway
 

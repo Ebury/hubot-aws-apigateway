@@ -9,11 +9,11 @@
 
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-aws-apigateway.git"
+    "url": "git://github.com/ebury/hubot-aws-apigateway.git"
   },
 
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-aws-apigateway/issues"
+    "url": "https://github.com/ebury/hubot-aws-apigateway/issues"
   },
 
   "dependencies": {
