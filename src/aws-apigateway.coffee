@@ -170,21 +170,25 @@ module.exports = (robot) ->
             return msg.reply 'Could not fetch list of API keys'
 
           else
+            console.log data
+            regex = new RegExp(msg.match[4])
+
             for k in data.items
-              if k.name == msg.match[4]
+              if regex.test(k.name)
                 rest_api = k.id
+                params = {apiKey: api_key, patchOperations: [{op: operation, path: '/stages', value: k.id + '/' + msg.match[5]}]}
+
+                AWS.APIGateway.updateApiKey params, ((error, data) ->
+                  if error
+                    console.log error
+                    return msg.reply 'Could not update API key: ' + msg.match[2]
+
+                  else
+                    return msg.reply 'Operation <' + operation + '> for **' + this.api_name + '** successful: ' + msg.match[2]
+                ).bind {api_name: k.name}
 
             if rest_api == null
               return msg.reply('API not found: ' + msg.match[4])
-
-            params = {apiKey: api_key, patchOperations: [{op: operation, path: '/stages', value: rest_api + '/' + msg.match[5]}]}
-            AWS.APIGateway.updateApiKey params, (error, data) ->
-              if error
-                console.log error
-                return msg.reply 'Could not update API key: ' + msg.match[2]
-
-              else
-                return msg.reply 'Operation <' + operation + '> for **' + msg.match[4] + '** successful: ' + msg.match[2]
 
   robot.respond /list apis/i, (msg) ->
     AWS.APIGateway.getRestApis (error, data) ->

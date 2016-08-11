@@ -10,7 +10,7 @@ AWS.mock('APIGateway', 'createApiKey', {id: "efgh5678", name: "New Unit Test API
 AWS.mock('APIGateway', 'getApiKeys', {items: [name: "New Unit Test API Key", id: "efgh5678", enabled: false]})
 AWS.mock('APIGateway', 'updateApiKey', {error: {}})
 AWS.mock('APIGateway', 'deleteApiKey', {})
-AWS.mock('APIGateway', 'getRestApis', {items: [id: '1234abcd', name: 'Unit Test API']})
+AWS.mock('APIGateway', 'getRestApis', {items: [{id: '1234abcd', name: 'Unit Test API 1'}, {id: '5678efgh', name: 'Unit Test API 2'}]})
 
 
 describe 'Create API Key', ->
@@ -93,22 +93,44 @@ describe 'Change assignment of API key to API', ->
 
   context 'user wants to assign API key to API for demo stage', ->
     beforeEach ->
-      @room.user.say 'user', '@hubot assign New Unit Test API Key to Unit Test API for demo stage'
+      @room.user.say 'user', '@hubot assign New Unit Test API Key to Unit Test API 1 for demo stage'
 
     it 'hubot should assign the API key to the requested API for the demo stage', ->
       expect(@room.messages).to.eql [
-        ['user', '@hubot assign New Unit Test API Key to Unit Test API for demo stage']
-        ['hubot', '@user Operation <add> for **Unit Test API** successful: New Unit Test API Key']
+        ['user', '@hubot assign New Unit Test API Key to Unit Test API 1 for demo stage']
+        ['hubot', '@user Operation <add> for **Unit Test API 1** successful: New Unit Test API Key']
+      ]
+
+  context 'user wants to assign API key to APIs for demo stage using a regular expression', ->
+    beforeEach ->
+      @room.user.say 'user', '@hubot assign New Unit Test API Key to Unit Test API.*? for demo stage'
+
+    it 'hubot should assign the API key to the requested API for the demo stage', ->
+      expect(@room.messages).to.eql [
+        ['user', '@hubot assign New Unit Test API Key to Unit Test API.*? for demo stage']
+        ['hubot', '@user Operation <add> for **Unit Test API 1** successful: New Unit Test API Key']
+        ['hubot', '@user Operation <add> for **Unit Test API 2** successful: New Unit Test API Key']
       ]
 
   context 'user wants to remove API key from API for demo stage', ->
     beforeEach ->
-      @room.user.say 'user', '@hubot remove New Unit Test API Key from Unit Test API for demo stage'
+      @room.user.say 'user', '@hubot remove New Unit Test API Key from Unit Test API 1 for demo stage'
 
     it 'hubot should remove the API key from the requested API for the demo stage', ->
       expect(@room.messages).to.eql [
-        ['user', '@hubot remove New Unit Test API Key from Unit Test API for demo stage']
-        ['hubot', '@user Operation <remove> for **Unit Test API** successful: New Unit Test API Key']
+        ['user', '@hubot remove New Unit Test API Key from Unit Test API 1 for demo stage']
+        ['hubot', '@user Operation <remove> for **Unit Test API 1** successful: New Unit Test API Key']
+      ]
+
+  context 'user wants to remove API key from APIs for demo stage', ->
+    beforeEach ->
+      @room.user.say 'user', '@hubot remove New Unit Test API Key from Unit Test API.*? for demo stage'
+
+    it 'hubot should remove the API key from the requested API for the demo stage', ->
+      expect(@room.messages).to.eql [
+        ['user', '@hubot remove New Unit Test API Key from Unit Test API.*? for demo stage']
+        ['hubot', '@user Operation <remove> for **Unit Test API 1** successful: New Unit Test API Key']
+        ['hubot', '@user Operation <remove> for **Unit Test API 2** successful: New Unit Test API Key']
       ]
 
   context 'user wants to assign API key to unknown API', ->
